@@ -35,6 +35,9 @@
   <PropertyGroup>
     <ApplicationIcon>chinaz2sdsd.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -54,6 +57,7 @@
     <Reference Include="Telerik.WinControls.GridView, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.Themes.Breeze, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.Themes.Crystal, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.Themes.Office2010Black, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.UI, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="TelerikCommon, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
   </ItemGroup>
@@ -70,6 +74,8 @@
     <Compile Include="AutoTimer.Designer.cs">
       <DependentUpon>AutoTimer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\SendCommand.cs" />
+    <Compile Include="ConsoleClass.cs" />
     <Compile Include="EditInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,7 +94,9 @@
     <Compile Include="LoadBoxMainForm.Designer.cs">
       <DependentUpon>LoadBoxMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\IniConfig.cs" />
     <Compile Include="Model\PwmParams.cs" />
+    <Compile Include="Model\SendResult.cs" />
     <Compile Include="Model\VoltageParams.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,6 +105,12 @@
     </Compile>
     <Compile Include="FHelp.designer.cs">
       <DependentUpon>FHelp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowCommand.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowCommand.Designer.cs">
+      <DependentUpon>ShowCommand.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
@@ -127,6 +141,10 @@
     <EmbeddedResource Include="FHelp.resx">
       <DependentUpon>FHelp.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ShowCommand.resx">
+      <DependentUpon>ShowCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -160,12 +178,6 @@
     <None Include="Resources\open_source.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\CommonLibrary\CommonUtils\CommonUtils\CommonUtils.csproj">
-      <Project>{ebfca1b5-23f1-4f94-928a-db1a7b98eed6}</Project>
-      <Name>CommonUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\help.png" />
     <None Include="Resources\figlog.png" />
     <None Include="Resources\figkeyLogo.png" />
@@ -179,5 +191,12 @@
     <Content Include="chinaz2sdsd.ico" />
     <Content Include="favicon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CommonRepository\CommonLibrary\MyCommonLibrary001\CommonUtils\CommonUtils\CommonUtils.csproj">
+      <Project>{64db2793-f976-436e-a6e8-90069e9eaf96}</Project>
+      <Name>CommonUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

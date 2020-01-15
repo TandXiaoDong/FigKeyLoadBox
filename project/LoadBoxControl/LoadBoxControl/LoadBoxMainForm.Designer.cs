@@ -32,6 +32,14 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tool_cb_serialItem = new System.Windows.Forms.ToolStripComboBox();
+            this.tool_refresh = new System.Windows.Forms.ToolStripButton();
+            this.tool_open_searial = new System.Windows.Forms.ToolStripButton();
+            this.tool_close_serial = new System.Windows.Forms.ToolStripButton();
+            this.tool_import = new System.Windows.Forms.ToolStripButton();
+            this.tool_save = new System.Windows.Forms.ToolStripButton();
+            this.tool_abort = new System.Windows.Forms.ToolStripButton();
+            this.tool_help = new System.Windows.Forms.ToolStripButton();
+            this.tool_autosend = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tb_v20 = new Telerik.WinControls.UI.RadButton();
             this.tb_v19 = new Telerik.WinControls.UI.RadButton();
@@ -179,11 +187,7 @@
             this.label62 = new System.Windows.Forms.Label();
             this.label63 = new System.Windows.Forms.Label();
             this.tb_pp30 = new Telerik.WinControls.UI.RadButton();
-            this.tool_refresh = new System.Windows.Forms.ToolStripButton();
-            this.tool_open_searial = new System.Windows.Forms.ToolStripButton();
-            this.tool_close_serial = new System.Windows.Forms.ToolStripButton();
-            this.tool_abort = new System.Windows.Forms.ToolStripButton();
-            this.tool_help = new System.Windows.Forms.ToolStripButton();
+            this.tool_autoSendCfg = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_v20)).BeginInit();
@@ -282,6 +286,10 @@
             this.tool_refresh,
             this.tool_open_searial,
             this.tool_close_serial,
+            this.tool_import,
+            this.tool_save,
+            this.tool_autosend,
+            this.tool_autoSendCfg,
             this.tool_abort,
             this.tool_help});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -301,6 +309,83 @@
             // 
             this.tool_cb_serialItem.Name = "tool_cb_serialItem";
             this.tool_cb_serialItem.Size = new System.Drawing.Size(121, 29);
+            // 
+            // tool_refresh
+            // 
+            this.tool_refresh.ForeColor = System.Drawing.Color.White;
+            this.tool_refresh.Image = global::LoadBoxControl.Properties.Resources.Refresh2_16x16;
+            this.tool_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_refresh.Name = "tool_refresh";
+            this.tool_refresh.Size = new System.Drawing.Size(62, 26);
+            this.tool_refresh.Text = "刷新";
+            // 
+            // tool_open_searial
+            // 
+            this.tool_open_searial.ForeColor = System.Drawing.Color.White;
+            this.tool_open_searial.Image = global::LoadBoxControl.Properties.Resources.open_source;
+            this.tool_open_searial.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_open_searial.Name = "tool_open_searial";
+            this.tool_open_searial.Size = new System.Drawing.Size(94, 26);
+            this.tool_open_searial.Text = "打开串口";
+            // 
+            // tool_close_serial
+            // 
+            this.tool_close_serial.ForeColor = System.Drawing.Color.White;
+            this.tool_close_serial.Image = global::LoadBoxControl.Properties.Resources.Close_16x16;
+            this.tool_close_serial.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_close_serial.Name = "tool_close_serial";
+            this.tool_close_serial.Size = new System.Drawing.Size(94, 26);
+            this.tool_close_serial.Text = "关闭串口";
+            // 
+            // tool_import
+            // 
+            this.tool_import.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tool_import.ForeColor = System.Drawing.Color.White;
+            this.tool_import.Image = ((System.Drawing.Image)(resources.GetObject("tool_import.Image")));
+            this.tool_import.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_import.Name = "tool_import";
+            this.tool_import.Size = new System.Drawing.Size(46, 26);
+            this.tool_import.Text = "导入";
+            // 
+            // tool_save
+            // 
+            this.tool_save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tool_save.ForeColor = System.Drawing.Color.White;
+            this.tool_save.Image = ((System.Drawing.Image)(resources.GetObject("tool_save.Image")));
+            this.tool_save.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_save.Name = "tool_save";
+            this.tool_save.Size = new System.Drawing.Size(46, 26);
+            this.tool_save.Text = "保存";
+            // 
+            // tool_abort
+            // 
+            this.tool_abort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tool_abort.ForeColor = System.Drawing.Color.White;
+            this.tool_abort.Image = ((System.Drawing.Image)(resources.GetObject("tool_abort.Image")));
+            this.tool_abort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_abort.Name = "tool_abort";
+            this.tool_abort.Size = new System.Drawing.Size(46, 26);
+            this.tool_abort.Text = "关于";
+            // 
+            // tool_help
+            // 
+            this.tool_help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tool_help.ForeColor = System.Drawing.Color.White;
+            this.tool_help.Image = ((System.Drawing.Image)(resources.GetObject("tool_help.Image")));
+            this.tool_help.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_help.Name = "tool_help";
+            this.tool_help.Size = new System.Drawing.Size(46, 26);
+            this.tool_help.Text = "帮助";
+            // 
+            // tool_autosend
+            // 
+            this.tool_autosend.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tool_autosend.ForeColor = System.Drawing.Color.White;
+            this.tool_autosend.Image = ((System.Drawing.Image)(resources.GetObject("tool_autosend.Image")));
+            this.tool_autosend.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_autosend.Name = "tool_autosend";
+            this.tool_autosend.Size = new System.Drawing.Size(78, 26);
+            this.tool_autosend.Text = "自动发送";
             // 
             // tableLayoutPanel1
             // 
@@ -2060,52 +2145,15 @@
             this.tb_pp30.Size = new System.Drawing.Size(82, 45);
             this.tb_pp30.TabIndex = 112;
             // 
-            // tool_refresh
+            // tool_autoSendCfg
             // 
-            this.tool_refresh.ForeColor = System.Drawing.Color.White;
-            this.tool_refresh.Image = global::LoadBoxControl.Properties.Resources.Refresh2_16x16;
-            this.tool_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tool_refresh.Name = "tool_refresh";
-            this.tool_refresh.Size = new System.Drawing.Size(62, 26);
-            this.tool_refresh.Text = "刷新";
-            // 
-            // tool_open_searial
-            // 
-            this.tool_open_searial.ForeColor = System.Drawing.Color.White;
-            this.tool_open_searial.Image = global::LoadBoxControl.Properties.Resources.open_source;
-            this.tool_open_searial.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tool_open_searial.Name = "tool_open_searial";
-            this.tool_open_searial.Size = new System.Drawing.Size(94, 26);
-            this.tool_open_searial.Text = "打开串口";
-            // 
-            // tool_close_serial
-            // 
-            this.tool_close_serial.ForeColor = System.Drawing.Color.White;
-            this.tool_close_serial.Image = global::LoadBoxControl.Properties.Resources.Close_16x16;
-            this.tool_close_serial.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tool_close_serial.Name = "tool_close_serial";
-            this.tool_close_serial.Size = new System.Drawing.Size(94, 26);
-            this.tool_close_serial.Text = "关闭串口";
-            // 
-            // tool_abort
-            // 
-            this.tool_abort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tool_abort.ForeColor = System.Drawing.Color.White;
-            this.tool_abort.Image = ((System.Drawing.Image)(resources.GetObject("tool_abort.Image")));
-            this.tool_abort.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tool_abort.Name = "tool_abort";
-            this.tool_abort.Size = new System.Drawing.Size(46, 26);
-            this.tool_abort.Text = "关于";
-            // 
-            // tool_help
-            // 
-            this.tool_help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tool_help.ForeColor = System.Drawing.Color.White;
-            this.tool_help.Image = ((System.Drawing.Image)(resources.GetObject("tool_help.Image")));
-            this.tool_help.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tool_help.Name = "tool_help";
-            this.tool_help.Size = new System.Drawing.Size(46, 26);
-            this.tool_help.Text = "帮助";
+            this.tool_autoSendCfg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tool_autoSendCfg.ForeColor = System.Drawing.Color.White;
+            this.tool_autoSendCfg.Image = ((System.Drawing.Image)(resources.GetObject("tool_autoSendCfg.Image")));
+            this.tool_autoSendCfg.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_autoSendCfg.Name = "tool_autoSendCfg";
+            this.tool_autoSendCfg.Size = new System.Drawing.Size(110, 26);
+            this.tool_autoSendCfg.Text = "自动发送配置";
             // 
             // LoadBoxMainForm
             // 
@@ -2375,5 +2423,9 @@
         private Telerik.WinControls.UI.RadButton tb_pp1;
         private System.Windows.Forms.ToolStripButton tool_help;
         private System.Windows.Forms.ToolStripButton tool_abort;
+        private System.Windows.Forms.ToolStripButton tool_save;
+        private System.Windows.Forms.ToolStripButton tool_import;
+        private System.Windows.Forms.ToolStripButton tool_autosend;
+        private System.Windows.Forms.ToolStripButton tool_autoSendCfg;
     }
 }
