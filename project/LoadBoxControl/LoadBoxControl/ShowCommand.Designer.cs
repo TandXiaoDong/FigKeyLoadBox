@@ -37,6 +37,7 @@
             // 
             // tbInput
             // 
+            this.tbInput.AutoScroll = true;
             this.tbInput.BackColor = System.Drawing.Color.Black;
             this.tbInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbInput.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -48,7 +49,8 @@
             // 
             // 
             this.tbInput.RootElement.StretchVertically = true;
-            this.tbInput.Size = new System.Drawing.Size(458, 470);
+            this.tbInput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbInput.Size = new System.Drawing.Size(893, 470);
             this.tbInput.TabIndex = 0;
             this.tbInput.ThemeName = "Office2010Black";
             // 
@@ -56,7 +58,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 470);
+            this.ClientSize = new System.Drawing.Size(893, 470);
             this.Controls.Add(this.tbInput);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -67,6 +69,7 @@
             this.RootElement.ApplyShapeToControl = true;
             this.Text = "自动发送";
             this.ThemeName = "Office2010Black";
+            this.Load += new System.EventHandler(this.ShowCommand_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tbInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);

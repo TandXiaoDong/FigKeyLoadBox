@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -190,6 +191,10 @@
     <Content Include="chinaz2.ico" />
     <Content Include="chinaz2sdsd.ico" />
     <Content Include="favicon.ico" />
+    <None Include="Resources\Save_16x16.png" />
+    <None Include="Resources\Properties_16x16.png" />
+    <None Include="Resources\SendAgain.png" />
+    <None Include="Resources\import.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\CommonRepository\CommonLibrary\MyCommonLibrary001\CommonUtils\CommonUtils\CommonUtils.csproj">

@@ -140,13 +140,14 @@ namespace LoadBoxControl.Common
             double value = 0;
             double.TryParse(voltage, out value);
             var sendByte = SendVoltageString(startIndex, value);
-            LogHelper.Log.Info($"【发送字符串】index={startIndex} " + BitConverter.ToString(sendByte));
+            LogHelper.Log.Info($"【电压】index={startIndex} " + BitConverter.ToString(sendByte));
             sendResult.sendString = BitConverter.ToString(sendByte);
             if (SendDevConfigMsg(sendByte))
             {
                 sendResult.IsSendSuccess = true;
             }
-            sendResult.IsSendSuccess = false;
+            else
+                sendResult.IsSendSuccess = false;
             return sendResult;
         }
 
@@ -156,13 +157,14 @@ namespace LoadBoxControl.Common
             double value = 0;
             double.TryParse(freq, out value);
             var sendByte = SendPwmFreqString(startIndex, value);
-            LogHelper.Log.Info($"【pwd-freq】index={startIndex} " + BitConverter.ToString(sendByte));
+            LogHelper.Log.Info($"【频率】index={startIndex} " + BitConverter.ToString(sendByte));
             sendResult.sendString = BitConverter.ToString(sendByte);
             if (SendDevConfigMsg(sendByte))
             {
                 sendResult.IsSendSuccess = true;
             }
-            sendResult.IsSendSuccess = false;
+            else
+                sendResult.IsSendSuccess = false;
             return sendResult;
         }
 
@@ -172,13 +174,14 @@ namespace LoadBoxControl.Common
             double value = 0;
             double.TryParse(freqPersent, out value);
             var sendByte = SendPwmFreqPersentString(startIndex, value);
-            LogHelper.Log.Info($"【pwd-persent】index={startIndex} " + BitConverter.ToString(sendByte));
+            LogHelper.Log.Info($"【占空比】index={startIndex} " + BitConverter.ToString(sendByte));
             sendResult.sendString = BitConverter.ToString(sendByte);
             if (SendDevConfigMsg(sendByte))
             {
                 sendResult.IsSendSuccess = true;
             }
-            sendResult.IsSendSuccess = false;
+            else
+                sendResult.IsSendSuccess = false;
             return sendResult;
         }
 
