@@ -36,6 +36,37 @@ namespace LoadBoxControl.Model
         public const string CONFIG_PARAM_V19 = "ch19_voltage";
         public const string CONFIG_PARAM_V20 = "ch20_voltage";
 
+        public const string CONFIG_PARAM_PF_PP1 = "ch1_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP2 = "ch2_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP3 = "ch3_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP4 = "ch4_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP5 = "ch5_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP6 = "ch6_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP7 = "ch7_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP8 = "ch8_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP9 = "ch9_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP10 = "ch10_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP11 = "ch11_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP12 = "ch12_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP13 = "ch13_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP14 = "ch14_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP15 = "ch15_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP16 = "ch16_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP17 = "ch17_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP18 = "ch18_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP19 = "ch19_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP20 = "ch20_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP21 = "ch21_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP22 = "ch22_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP23 = "ch23_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP24 = "ch24_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP25 = "ch25_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP26 = "ch26_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP27 = "ch27_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP28 = "ch28_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP29 = "ch29_frequency_dutyCycle";
+        public const string CONFIG_PARAM_PF_PP30 = "ch30_frequency_dutyCycle";
+
         public const string CONFIG_PARAM_PF1 = "ch1_frequency";
         public const string CONFIG_PARAM_PF2 = "ch2_frequency";
         public const string CONFIG_PARAM_PF3 = "ch3_frequency";

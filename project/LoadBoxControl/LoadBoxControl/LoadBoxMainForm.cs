@@ -68,6 +68,8 @@ namespace LoadBoxControl
             voltageParams = new VoltageParams();
             pwmParams = new PwmParams();
             configPath = AppDomain.CurrentDomain.BaseDirectory + "config\\";
+
+
             if (!Directory.Exists(configPath))
             {
                 Directory.CreateDirectory(configPath);
@@ -201,7 +203,14 @@ namespace LoadBoxControl
 
         private void Tool_resetparam_Click(object sender, EventArgs e)
         {
-            InitAutoSendParam(true);
+            //InitAutoSendParam(true);
+            if (sendCommand == null)
+            {
+                MessageBox.Show("请检查串口状态！", "提示", MessageBoxButtons.OK);
+                return;
+            }
+            ShowCommand showCommand = new ShowCommand(sendCommand);
+            showCommand.ResetCommand();
         }
 
         private void Tool_autoSendCfg_Click(object sender, EventArgs e)
@@ -871,7 +880,7 @@ namespace LoadBoxControl
 
         private void ShowData(byte[] buffer)
         {
-            LogHelper.Log.Info($"********【收到下位机返回消息】len={buffer.Length} " + BitConverter.ToString(buffer));
+            //LogHelper.Log.Info($"********【收到下位机返回消息】len={buffer.Length} " + BitConverter.ToString(buffer));
             //this.txtReceive.Text += $"{BitConverter.ToString(buffer).Replace("-", " ")}";
             //解析数据
             /*
@@ -889,19 +898,21 @@ namespace LoadBoxControl
                     return;
                 }
             }
-            if (tframe + buffer.Length > cacheBufferCount)
+            if (tframe + buffer.Length > cacheBufferCount || (buffer.Length == 4 && buffer[1] == 0XFF && buffer[2] == 0XFF && buffer[3] == 0XFF))
             {
                 //重置缓冲区
                 tframe = 0;
                 cacheCount = 0;
                 rframe = 0;
-                LogHelper.Log.Info("重置缓冲区..." + bufferTemp.Length + "  " + buffer.Length);
                 if (buffer[0] != 0XC1 && buffer[1] != 0XC0)
                 {
                     bufferTemp = new byte[cacheBufferCount + buffer.Length];
                     return;
                 }
-                bufferTemp = new byte[cacheBufferCount + buffer.Length];
+                else if (buffer[0] == 0XC1 && buffer[1] == 0XC0)
+                {
+                    bufferTemp = new byte[cacheBufferCount + buffer.Length];
+                }
             }
             Array.Copy(buffer,0,bufferTemp,tframe,buffer.Length);
             tframe += buffer.Length;
@@ -909,7 +920,7 @@ namespace LoadBoxControl
 
             if (bufferTemp[rframe + 2] == 0X2B)
             {
-                if (cacheCount > 0X2B + 3)
+                if (cacheCount >= 0X2B + 3)
                 {
                     byte[] buffer2b = new byte[0X2B + 3];
                     Array.Copy(bufferTemp, rframe, buffer2b, 0, buffer2b.Length);
@@ -920,13 +931,12 @@ namespace LoadBoxControl
             }
             else if (bufferTemp[rframe + 2] == 0X7B)
             {
-                if (cacheCount > 0X7B + 3)
+                if (cacheCount >= 0X7B + 3)
                 {
                     byte[] buffer7b = new byte[0X7B + 3];
                     Array.Copy(bufferTemp, rframe, buffer7b, 0, buffer7b.Length);
                     rframe += buffer7b.Length;
                     cacheCount -= rframe;
-                    //LogHelper.Log.Info("频率=" + BitConverter.ToString(buffer7b));
                     AnalysisVoltageData(buffer7b);
                 }
             }
@@ -1049,7 +1059,7 @@ namespace LoadBoxControl
             if (buffer[2] == 0X2B)
             {
                 //电压数据
-                LogHelper.Log.Info("【电压完整数据】" + BitConverter.ToString(buffer));
+                //LogHelper.Log.Info("【电压完整数据】" + BitConverter.ToString(buffer));
 
                 #region 1-20
                 voltageParams.VoltageChannel1 = ((double)BitConverter.ToInt16(buffer, 5) / 10).ToString();
@@ -1079,7 +1089,7 @@ namespace LoadBoxControl
             else if (buffer[2] == 0X7B)
             {
                 //频率和占空比
-                LogHelper.Log.Info("【频率和占空比完整数据】" + BitConverter.ToString(buffer));
+                //LogHelper.Log.Info("【频率和占空比完整数据】" + BitConverter.ToString(buffer));
                 //传入格式为：频率1-10+占空比1-10；频率11-20+占空比11-20；频率21-30+占空比21-30；
                 #region 1-10
                 pwmParams.PwmFrequencyCh1 = BitConverter.ToInt16(buffer, 5).ToString();
@@ -1489,122 +1499,66 @@ namespace LoadBoxControl
                 if (File.Exists(path))
                     return;
             }
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_INTERVAL, IniConfig.CONFIG_VOLTAGE_FREQ_INTERVAL,"1000",path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_INTERVAL, IniConfig.CONFIG_SIGNAL_INTERVAL,"1000",path);
+            var explainVG = "       ;参数格式：(电压,延时时间)，单位：秒";
+            var explainPW = "       ;参数格式：(频率,占空比,延时时间)，单位：秒";
 
-            #region voltage
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V1, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V2, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V3, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V4, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V5, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V6, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V7, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V8, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V9, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V10, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V11, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V12, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V13, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V14, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V15, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V16, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V17, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V18, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V19, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_VOLTAGE, IniConfig.CONFIG_PARAM_V20, "0", path);
-            #endregion
+            using (FileStream fs = new FileStream(path, FileMode.Create))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+                {
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V1}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V2}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V3}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V4}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V5}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V6}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V7}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V8}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V9}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V10}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V11}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V12}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V13}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V14}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V15}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V16}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V17}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V18}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V19}=(0,1){explainVG}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_V20}=(0,1){explainVG}");
 
-            #region pvm
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF1, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP1, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF2, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP2, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF3, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP3, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF4, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP4, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF5, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP5, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF6, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP6, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF7, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP7, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF8, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP8, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF9, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP9, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF10, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP10, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF11, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP11, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF12, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP12, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF13, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP13, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF14, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP14, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF15, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP15, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF16, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP16, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF17, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP17, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF18, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP18, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF19, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP19, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF20, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP20, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF21, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP21, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF22, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP22, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF23, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP23, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF24, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP24, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF25, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP25, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF26, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP26, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF27, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP27, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF28, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP28, "0", path);
-
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF29, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP29, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PF30, "0", path);
-            INIFile.SetValue(IniConfig.CONFIG_SECTION_PVM, IniConfig.CONFIG_PARAM_PP30, "0", path);
-            #endregion
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP1}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP2}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP3}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP4}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP5}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP6}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP7}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP8}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP9}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP10}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP11}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP12}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP13}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP14}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP15}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP16}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP17}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP18}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP19}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP20}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP21}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP22}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP23}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP24}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP25}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP26}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP27}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP28}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP29}=(0,0,1){explainPW}");
+                    sw.WriteLine($"{IniConfig.CONFIG_PARAM_PF_PP30}=(0,0,1){explainPW}");
+                }
+            }
         }
     }
 }
